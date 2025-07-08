@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Volunteer - Event Nainjas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Event Nainjas Logo" class="logo">
+            Event Nainjas
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('admin_events') }}">Events</a></li>
+            <li><a href="{{ url_for('admin_volunteers') }}" class="active">Volunteers</a></li>
+            <li><a href="{{ url_for('admin_logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="admin-section">
+            <div class="page-header">
+                <h1>Volunteer Details</h1>
+                <a href="{{ url_for('admin_volunteers') }}" class="btn btn-primary">Back to Volunteers</a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="volunteer-details">
+                <div class="profile-info">
+                    {% if volunteer.photo %}
+                    <img src="{{ url_for('static', filename=volunteer.photo) }}" alt="Profile Photo" class="profile-photo" onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/default-profile.jpg') }}';">
+                    {% endif %}
+                    <div class="profile-details">
+                        <h2>{{ volunteer.name }}</h2>
+                        <p><strong>Email:</strong> {{ volunteer.email }}</p>
+                        <p><strong>Phone:</strong> {{ volunteer.phone }}</p>
+                        <p><strong>WhatsApp:</strong> {{ volunteer.whatsapp_number }}</p>
+                        <p><strong>Document Type:</strong> {{ volunteer.document_type }}</p>
+                        <p><strong>Document Number:</strong> {{ volunteer.document_number }}</p>
+                        <p><strong>Status:</strong> 
+                            {% if volunteer.is_verified %}
+                            <span class="badge badge-success">Verified</span>
+                            {% else %}
+                            <span class="badge badge-warning">Pending Verification</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Registered On:</strong> {{ volunteer.created_at.strftime('%B %d, %Y') }}</p>
+                    </div>
+                </div>
+
+                {% if volunteer.document_front or volunteer.document_back %}
+                <div class="document-section">
+                    <h3>Document Images</h3>
+                    <div class="document-images">
+                        {% if volunteer.document_front %}
+                        <div class="document-image">
+                            <h4>Front</h4>
+                            <img src="{{ url_for('static', filename=volunteer.document_front) }}" alt="Document Front">
+                        </div>
+                        {% endif %}
+                        {% if volunteer.document_back %}
+                        <div class="document-image">
+                            <h4>Back</h4>
+                            <img src="{{ url_for('static', filename=volunteer.document_back) }}" alt="Document Back">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="registered-events">
+                    <h3>Registered Events</h3>
+                    {% if volunteer.registered_events %}
+                    <div class="events-grid">
+                        {% for event in volunteer.registered_events %}
+                        <div class="event-card">
+                            {% if event.image %}
+                            <div class="event-image">
+                                <img src="{{ url_for('static', filename='images/events/' + event.image) }}" alt="{{ event.title }}">
+                            </div>
+                            {% endif %}
+                            <div class="event-content">
+                                <h4>{{ event.title }}</h4>
+                                <p class="event-date">📅 {{ event.date.strftime('%B %d, %Y') }}</p>
+                                <p class="event-time">⏰ {{ event.time }}</p>
+                                <p class="event-location">📍 {{ event.location }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="no-data">No events registered yet.</p>
+                    {% endif %}
+                </div>
+
+                <div class="action-buttons">
+                    <form action="{{ url_for('admin_toggle_volunteer_status', volunteer_id=volunteer.id) }}" method="POST" class="delete-form">
+                        <button type="submit" class="btn {% if volunteer.is_verified %}btn-danger{% else %}btn-primary{% endif %}">
+                            {{ 'Unverify' if volunteer.is_verified else 'Verify' }} Volunteer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Event Nainjas. All rights reserved.</p>
+    </footer>
+</body>
+</html> 

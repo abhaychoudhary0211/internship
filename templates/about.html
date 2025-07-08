@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Event Nainjas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Event Nainjas Logo" class="logo">
+            Event Nainjas
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}" class="active">About</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="about-section">
+            <h1>About Event Nainjas</h1>
+            <p>Welcome to Event Nainjas, your trusted partner in event management and discovery!</p>
+            
+            <div class="about-content">
+                <h2>Our Mission</h2>
+                <p>To connect people through meaningful events and provide seamless event management solutions for organizers and attendees alike.</p>
+
+                <h2>Our Services</h2>
+                <p>We offer comprehensive event management services including:</p>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li>Event Planning and Organization</li>
+                    <li>Venue Selection and Management</li>
+                    <li>Registration and Ticketing</li>
+                    <li>Marketing and Promotion</li>
+                    <li>On-site Event Support</li>
+                </ul>
+
+                <h2>Why Choose Us?</h2>
+                <p>With years of experience in the event management industry, we bring expertise, reliability, and innovation to every event we handle. Our platform makes it easy to discover, register, and manage events of all sizes.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Event Nainjas. All rights reserved.</p>
+        <div class="developer-footer">
+            <p>Designed & Developed with ❤️ by <a href="https://github.com/abhaychoudhary0211" target="_blank" class="developer-link" style="background: linear-gradient(to right, #ff0000, #00ff00, #0000ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: bold;">Abhay Choudhary</a></p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

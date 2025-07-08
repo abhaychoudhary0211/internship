@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard - Event Nainjas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="{{ url_for('home') }}">Event Nainjas</a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-outline">Logout</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="dashboard-header">
+            <h1>Welcome, {{ volunteer.name }}!</h1>
+            <p>Manage your volunteer profile and event registrations</p>
+        </section>
+
+        <div class="dashboard-grid">
+            <!-- Profile Section -->
+            <section class="dashboard-card">
+                <h2>Your Profile</h2>
+                <div class="profile-info">
+                    {% if volunteer.photo %}
+                    <img src="{{ url_for('static', filename=volunteer.photo) }}" alt="{{ volunteer.name }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/default-profile.jpg') }}';">
+                    {% endif %}
+                    <div class="profile-details">
+                        <p><strong>Name:</strong> {{ volunteer.name }}</p>
+                        <p><strong>Email:</strong> {{ volunteer.email }}</p>
+                        <p><strong>Phone:</strong> {{ volunteer.phone }}</p>
+                        <p><strong>WhatsApp:</strong> {{ volunteer.whatsapp_number }}</p>
+                        <p><strong>Document Type:</strong> {{ volunteer.document_type }}</p>
+                        <p><strong>Status:</strong> 
+                            {% if volunteer.is_verified %}
+                            <span class="badge badge-success">Verified</span>
+                            {% else %}
+                            <span class="badge badge-warning">Pending Verification</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Registered Events Section -->
+            <section class="dashboard-card">
+                <h2>Your Registered Events</h2>
+                {% if registered_events %}
+                <div class="events-grid">
+                    {% for event in registered_events %}
+                    <div class="event-card">
+                        {% if event.image %}
+                        <div class="event-image">
+                            <img src="{{ url_for('static', filename='images/events/' + event.image) }}" alt="{{ event.title }}" onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/default-event.jpg') }}';">
+                        </div>
+                        {% endif %}
+                        <div class="event-content">
+                            <h3>{{ event.title }}</h3>
+                            <p class="event-date">{{ event.date.strftime('%B %d, %Y') }} at {{ event.time }}</p>
+                            <p class="event-location">{{ event.location }}</p>
+                            <p class="event-description">{{ event.description }}</p>
+                            <a href="{{ event.whatsapp_group_link }}" target="_blank" class="btn btn-primary">Join WhatsApp Group</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="no-events">You haven't registered for any events yet.</p>
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Browse Events</a>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Event Nainjas. All rights reserved.</p>
+        <div class="developer-footer">
+            <p>Designed & Developed with ❤️ by <a href="https://github.com/abhaychoudhary0211" target="_blank" class="developer-link" style="background: linear-gradient(to right, #ff0000, #00ff00, #0000ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: bold;">Abhay Choudhary</a></p>
+        </div>
+    </footer>
+</body>
+</html> 

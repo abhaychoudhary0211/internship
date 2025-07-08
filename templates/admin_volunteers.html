@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Volunteers - Event Nainjas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Event Nainjas Logo" class="logo">
+            Event Nainjas
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('admin_events') }}">Events</a></li>
+            <li><a href="{{ url_for('admin_volunteers') }}" class="active">Volunteers</a></li>
+            <li><a href="{{ url_for('admin_logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="admin-section">
+            <h1>Manage Volunteers</h1>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="volunteers-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Registered Events</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if volunteers %}
+                            {% for volunteer in volunteers %}
+                            <tr>
+                                <td>{{ volunteer.name }}</td>
+                                <td>{{ volunteer.email }}</td>
+                                <td>{{ volunteer.phone }}</td>
+                                <td>{{ volunteer.registered_events|length }}</td>
+                                <td>
+                                    <span class="status-badge {% if volunteer.is_active %}upcoming{% else %}past{% endif %}">
+                                        {{ 'Active' if volunteer.is_active else 'Inactive' }}
+                                    </span>
+                                </td>
+                                <td class="actions">
+                                    <a href="{{ url_for('admin_view_volunteer', volunteer_id=volunteer.id) }}" class="action-btn">View</a>
+                                    <form action="{{ url_for('admin_toggle_volunteer_status', volunteer_id=volunteer.id) }}" method="POST" class="delete-form">
+                                        <button type="submit" class="action-btn {% if volunteer.is_active %}delete-btn{% else %}edit-btn{% endif %}">
+                                            {{ 'Deactivate' if volunteer.is_active else 'Activate' }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No volunteers found</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Event Nainjas. All rights reserved.</p>
+        <div class="developer-footer">
+            <p>Designed & Developed by <a href="https://github.com/abhaychoudhary0211" target="_blank" class="developer-link">Abhay Choudhary</a></p>
+        </div>
+    </footer>
+</body>
+</html> 

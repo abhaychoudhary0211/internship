@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Nainjas - Volunteer for Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Event Nainjas Logo" class="logo">
+            Event Nainjas
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}" class="register-btn">Register as Volunteer</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section class="hero">
+            <h1>Join Our Events as a Volunteer</h1>
+            <p>Make a difference in your community by volunteering at exciting events</p>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('register') }}" class="cta-button">Register as Volunteer</a>
+            {% endif %}
+        </section>
+
+        <section class="events">
+            <h2>Upcoming Events</h2>
+            <div class="event-grid">
+                {% if upcoming_events %}
+                    {% for event in upcoming_events %}
+                    <div class="event-card">
+                        {% if event.image %}
+                        <div class="event-image">
+                            <img src="{{ url_for('static', filename='images/events/' + event.image) }}" alt="{{ event.title }}">
+                        </div>
+                        {% endif %}
+                        <h3>{{ event.title }}</h3>
+                        <div class="event-date">📅 {{ event.date.strftime('%B %d, %Y') }}</div>
+                        <div class="event-time">⏰ {{ event.time }}</div>
+                        <div class="event-location">📍 {{ event.location }}</div>
+                        <p class="event-description">{{ event.description }}</p>
+                        {% if current_user.is_authenticated %}
+                            {% if event in current_user.registered_events %}
+                                <span class="registered-badge">Already Registered</span>
+                            {% else %}
+                                <form action="{{ url_for('register_event', event_id=event.id) }}" method="POST">
+                                    <button type="submit" class="register-btn">Register as Volunteer</button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="register-btn">Login to Register</a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-events">No upcoming events at the moment. Check back later!</p>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="events">
+            <h2>Past Events</h2>
+            <div class="event-grid">
+                {% if past_events %}
+                    {% for event in past_events %}
+                    <div class="event-card past-event">
+                        {% if event.image %}
+                        <div class="event-image">
+                            <img src="{{ url_for('static', filename='images/events/' + event.image) }}" alt="{{ event.title }}">
+                        </div>
+                        {% endif %}
+                        <h3>{{ event.title }}</h3>
+                        <div class="event-date">📅 {{ event.date.strftime('%B %d, %Y') }}</div>
+                        <div class="event-time">⏰ {{ event.time }}</div>
+                        <div class="event-location">📍 {{ event.location }}</div>
+                        <p class="event-description">{{ event.description }}</p>
+                        <div class="volunteer-info">
+                            <span>Volunteers: {{ event.registered_volunteers|length }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-events">No past events to display.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Event Nainjas. All rights reserved.</p>
+        <div class="developer-footer">
+            <p>Designed & Developed with ❤️ by <a href="https://github.com/abhaychoudhary0211" target="_blank" class="developer-link" style="background: linear-gradient(to right, #ff0000, #00ff00, #0000ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: bold;">Abhay Choudhary</a></p>
+        </div>
+    </footer>
+</body>
+</html> 

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Event - Event Nainjas Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Event Nainjas Logo" class="logo">
+            Event Nainjas Admin
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('admin_events') }}" class="active">Manage Events</a></li>
+            <li><a href="{{ url_for('admin_volunteers') }}">Volunteers</a></li>
+            <li><a href="{{ url_for('admin_logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="admin-section">
+            <h1>Add New Event</h1>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('admin_add_event') }}" enctype="multipart/form-data" class="admin-form">
+                <div class="form-group">
+                    <label for="title">Event Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Event Description</label>
+                    <textarea id="description" name="description" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Event Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Event Time</label>
+                    <input type="time" class="form-control" id="time" name="time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="whatsapp_group_link">WhatsApp Group Link</label>
+                    <input type="url" class="form-control" id="whatsapp_group_link" name="whatsapp_group_link" required>
+                    <small class="form-text text-muted">Enter the WhatsApp group invite link for this event</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Event Image</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Add Event</button>
+                    <a href="{{ url_for('admin_events') }}" class="cancel-btn">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Event Nainjas. All rights reserved.</p>
+        <div class="developer-footer">
+            <p>Designed & Developed with ❤️ by <a href="https://github.com/abhaychoudhary0211" target="_blank" class="developer-link" style="background: linear-gradient(to right, #ff0000, #00ff00, #0000ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: bold;">Abhay Choudhary</a></p>
+        </div>
+    </footer>
+</body>
+</html> 
